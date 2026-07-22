@@ -6,6 +6,11 @@ import (
 	"testing"
 )
 
+type User struct {
+	Name string `json:"name"`
+	Id   int    `json:"id"`
+}
+
 func TestLLToJson(t *testing.T) {
 	t.Parallel()
 	t.Run("Marshal", func(t *testing.T) {
@@ -49,22 +54,81 @@ func TestLLToJson(t *testing.T) {
 			}
 		},
 		"length": 2}`)
+
+		var uList LinkedList[User]
+		uList.Append(User{Name: "Bob", Id: 2121})
+		uList.Append(User{Name: "Lily", Id: 23672})
+		dataU, errU := json.Marshal(&uList)
+		require.NoError(t, errU)
+		require.JSONEq(t, string(dataU),
+			`{
+		"head": {
+        "value": {
+        "name": "Bob",
+        "id": 2121
+		},
+        "child": {
+        "value": {
+        "name": "Lily",
+        "id": 23672
+            }
+        }
+    	},
+    	"length": 2
+		}
+		`)
 	})
 }
 func TestJsonToLL(t *testing.T) {
 	t.Parallel()
 	t.Run("Unmarshal", func(t *testing.T) {
 		t.Parallel()
-		str2 := `{"head": { "value": "a", "child": { "value": "b", "child": {  "value": "c"}}},"length": 3}`
-		var list2 LinkedList[string]
-		err2 := json.Unmarshal([]byte(str2), &list2)
+		str := `{
+		"head": {
+		"value": "a",
+		"child": 
+		{ "value": "b",
+		"child": {
+		"value": "c"
+		}
+		}
+		},
+		"length": 3
+		}`
+		var list LinkedList[string]
+		err := json.Unmarshal([]byte(str), &list)
+		require.NoError(t, err)
+		require.Equal(t, 3, list.Len())
+		require.NotNil(t, &list.head)
+		require.Equal(t, "a", list.head.val)
+		require.Equal(t, "b", list.head.next.val)
+		require.Equal(t, "c", list.head.next.next.val)
+		require.Nil(t, list.head.next.next.next)
+
+		str1 := `{
+		"head": {
+        "value": {
+        "name": "Bob",
+        "id": 2121
+		},
+        "child": {
+        "value": {
+        "name": "Lily",
+        "id": 23672
+            }
+        }
+    	},
+    	"length": 2
+		}
+		`
+		var list1 LinkedList[User]
+		err2 := json.Unmarshal([]byte(str1), &list1)
 		require.NoError(t, err2)
-		require.Equal(t, 3, list2.Len())
-		require.NotNil(t, &list2.head)
-		require.Equal(t, "a", list2.head.val)
-		require.Equal(t, "b", list2.head.next.val)
-		require.Equal(t, "c", list2.head.next.next.val)
-		require.Nil(t, list2.head.next.next.next)
+		require.Equal(t, 2, list1.Len())
+		require.NotNil(t, &list1.head)
+		require.Equal(t, User{Name: "Bob", Id: 2121}, list1.head.val)
+		require.Equal(t, User{Name: "Lily", Id: 23672}, list1.head.next.val)
+		require.Nil(t, list1.head.next.next)
 
 	})
 }
