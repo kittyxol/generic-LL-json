@@ -36,8 +36,8 @@ func (n *Node[T]) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	n.val = i.Value
-	curN := n //корень
-	curDTO := &i //дто 
+	curN := n                 //корень
+	curDTO := &i              //дто
 	for curDTO.Child != nil { //
 		curN.next = &Node[T]{}
 		curN = curN.next
@@ -72,14 +72,14 @@ func (l *LinkedList[T]) Append(i T) {
 func (l *LinkedList[T]) UnmarshalJSON(data []byte) error {
 	type listDTO struct {
 		Head   *Node[T] `json:"head"`
-		Lenght int              `json:"lenght"`
+		Lenght int      `json:"lenght"`
 	}
 	var i listDTO
-	if err := json.Unmarshal(data, &i); err!=nil {
+	if err := json.Unmarshal(data, &i); err != nil {
 		return err
 	}
 	if i.Head != nil {
-		l.head =i.Head 
+		l.head = i.Head
 	}
 	return nil
 }

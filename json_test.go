@@ -19,10 +19,10 @@ func TestLLToJson(t *testing.T) {
 		var eList LinkedList[string]
 		data0, err0 := json.Marshal(&eList)
 		require.NoError(t, err0)
-		require.JSONEq(t, string(data0), `{"length": 0}` )
+		require.JSONEq(t, string(data0), `{"length": 0}`)
 		require.NoError(t, err)
-		require.JSONEq(t, string(data), 
-		`{
+		require.JSONEq(t, string(data),
+			`{
 		"head": {
   		"value": "a",
   		"child": {
@@ -40,8 +40,8 @@ func TestLLToJson(t *testing.T) {
 		nList.Append(22)
 		dataN, errn := json.Marshal(&nList)
 		require.NoError(t, errn)
-		require.JSONEq(t, string(dataN), 
-		`{
+		require.JSONEq(t, string(dataN),
+			`{
 		"head": { 
 		"value": 11, 
 		"child": { 
