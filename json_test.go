@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"testing"
-	
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -14,13 +14,13 @@ type User struct {
 
 func TestLinkedList_string_MarshalJSON_NonEmpty(t *testing.T) {
 	t.Parallel()
-		list := &LinkedList[string]{}
-		list.Append("a")
-		list.Append("b")
-		list.Append("c")
-		data, err := json.Marshal(list)
-		require.NoError(t, err)
-		require.JSONEq(t, string(data),`
+	list := &LinkedList[string]{}
+	list.Append("a")
+	list.Append("b")
+	list.Append("c")
+	data, err := json.Marshal(list)
+	require.NoError(t, err)
+	require.JSONEq(t, string(data), `
 		{
 			"head": {
 				"value": "a",
@@ -39,19 +39,19 @@ func TestLinkedList_string_MarshalJSON_NonEmpty(t *testing.T) {
 func TestLinkedList_string_MarshalJSON_Empty(t *testing.T) {
 	t.Parallel()
 	var List LinkedList[string]
-			data, err := json.Marshal(&List)
-			require.NoError(t, err)
-			require.JSONEq(t, string(data), `{"length": 0}`)
+	data, err := json.Marshal(&List)
+	require.NoError(t, err)
+	require.JSONEq(t, string(data), `{"length": 0}`)
 }
 
 func TestLinkedList_int_MarshalJSON_NonEmpty(t *testing.T) {
 	t.Parallel()
 	var List LinkedList[int]
-		List.Append(11)
-		List.Append(22)
-		data, err := json.Marshal(&List)
-		require.NoError(t, err)
-		require.JSONEq(t, string(data),`
+	List.Append(11)
+	List.Append(22)
+	data, err := json.Marshal(&List)
+	require.NoError(t, err)
+	require.JSONEq(t, string(data), `
 		{
 			"head": { 
 				"value": 11, 
@@ -63,14 +63,14 @@ func TestLinkedList_int_MarshalJSON_NonEmpty(t *testing.T) {
 		}
 			`)
 }
-func TestLinkedList_structUser_MarshalJSON_NonEmpty(t *testing.T){
+func TestLinkedList_structUser_MarshalJSON_NonEmpty(t *testing.T) {
 	t.Parallel()
 	var List LinkedList[User]
-		List.Append(User{Name: "Bob", Id: 2121})
-		List.Append(User{Name: "Lily", Id: 23672})
-		data, err := json.Marshal(&List)
-		require.NoError(t, err)
-		require.JSONEq(t, string(data),`
+	List.Append(User{Name: "Bob", Id: 2121})
+	List.Append(User{Name: "Lily", Id: 23672})
+	data, err := json.Marshal(&List)
+	require.NoError(t, err)
+	require.JSONEq(t, string(data), `
 		{
 			"head": {
 				"value": {
@@ -86,12 +86,12 @@ func TestLinkedList_structUser_MarshalJSON_NonEmpty(t *testing.T){
 			},
 			"length": 2
 		}
-		`)
+			`)
 }
 
-func TestLinkedList_string_UnmarshalJSON_NonEmpty(t *testing.T){
-		t.Parallel()
-		str := `{
+func TestLinkedList_string_UnmarshalJSON_NonEmpty(t *testing.T) {
+	t.Parallel()
+	str := `{
 			"head": {
 				"value": "a",
 				"child": { 
@@ -103,18 +103,18 @@ func TestLinkedList_string_UnmarshalJSON_NonEmpty(t *testing.T){
 			},
 			"length": 3
 		}`
-		var list LinkedList[string]
-		err := json.Unmarshal([]byte(str), &list)
-		require.NoError(t, err)
-		require.Equal(t, 3, list.Len())
-		require.NotNil(t, &list.head)
-		require.Equal(t, "a", list.head.val)
-		require.Equal(t, "b", list.head.next.val)
-		require.Equal(t, "c", list.head.next.next.val)
-		require.Nil(t, list.head.next.next.next)
+	var list LinkedList[string]
+	err := json.Unmarshal([]byte(str), &list)
+	require.NoError(t, err)
+	require.Equal(t, 3, list.Len())
+	require.NotNil(t, &list.head)
+	require.Equal(t, "a", list.head.val)
+	require.Equal(t, "b", list.head.next.val)
+	require.Equal(t, "c", list.head.next.next.val)
+	require.Nil(t, list.head.next.next.next)
 }
 
-func TestLinkedList_structUser_UnmarshalJSON_NonEmpty(t *testing.T){
+func TestLinkedList_structUser_UnmarshalJSON_NonEmpty(t *testing.T) {
 	t.Parallel()
 	str := `{
 			"head": {
@@ -132,14 +132,13 @@ func TestLinkedList_structUser_UnmarshalJSON_NonEmpty(t *testing.T){
 			"length": 2
 		}
 		`
-		var list LinkedList[User]
-		err := json.Unmarshal([]byte(str), &list)
-		require.NoError(t, err)
-		require.Equal(t, 2, list.Len())
-		require.NotNil(t, &list.head)
-		require.Equal(t, User{Name: "Bob", Id: 2121}, list.head.val)
-		require.Equal(t, User{Name: "Lily", Id: 23672}, list.head.next.val)
-		require.Nil(t, list.head.next.next)
+	var list LinkedList[User]
+	err := json.Unmarshal([]byte(str), &list)
+	require.NoError(t, err)
+	require.Equal(t, 2, list.Len())
+	require.NotNil(t, &list.head)
+	require.Equal(t, User{Name: "Bob", Id: 2121}, list.head.val)
+	require.Equal(t, User{Name: "Lily", Id: 23672}, list.head.next.val)
+	require.Nil(t, list.head.next.next)
 
 }
-

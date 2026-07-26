@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"strings"
-	"os"
 	"bufio"
 	"encoding/json"
+	"fmt"
+	"os"
+	"strings"
 )
 
 type Node[T any] struct {
@@ -36,9 +36,9 @@ func (n *Node[T]) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	n.val = i.Value
-	curN := n                
-	curDTO := &i              
-	for curDTO.Child != nil { 
+	curN := n
+	curDTO := &i
+	for curDTO.Child != nil {
 		curN.next = &Node[T]{}
 		curN = curN.next
 		curDTO = curDTO.Child
