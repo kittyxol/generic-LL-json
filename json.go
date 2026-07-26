@@ -1,11 +1,11 @@
 package main
 
 import (
+	"fmt"
+	"strings"
+	"os"
 	"bufio"
 	"encoding/json"
-	"fmt"
-	"os"
-	"strings"
 )
 
 type Node[T any] struct {
@@ -18,7 +18,7 @@ func (n *Node[T]) MarshalJSON() ([]byte, error) {
 		return json.Marshal(nil)
 	}
 	return json.Marshal(struct {
-		Value T        `json:"value,omitempty"`
+		Value T        `json:"value"`
 		Next  *Node[T] `json:"child,omitempty"`
 	}{
 		Value: n.val,
@@ -36,9 +36,9 @@ func (n *Node[T]) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	n.val = i.Value
-	curN := n                 //корень
-	curDTO := &i              //дто
-	for curDTO.Child != nil { //
+	curN := n                
+	curDTO := &i              
+	for curDTO.Child != nil { 
 		curN.next = &Node[T]{}
 		curN = curN.next
 		curDTO = curDTO.Child
@@ -72,7 +72,7 @@ func (l *LinkedList[T]) Append(i T) {
 func (l *LinkedList[T]) UnmarshalJSON(data []byte) error {
 	type listDTO struct {
 		Head   *Node[T] `json:"head"`
-		Lenght int      `json:"lenght"`
+		Length int      `json:"length"`
 	}
 	var i listDTO
 	if err := json.Unmarshal(data, &i); err != nil {
@@ -88,13 +88,13 @@ func (l *LinkedList[T]) MarshalJSON() ([]byte, error) {
 	if l == nil {
 		return json.Marshal(nil)
 	}
-	Leng := l.Len()
+	length := l.Len()
 	return json.Marshal(struct {
 		Head   *Node[T] `json:"head,omitempty"`
 		Length int      `json:"length"`
 	}{
 		Head:   l.head,
-		Length: Leng,
+		Length: length,
 	})
 }
 func (l *LinkedList[T]) Len() int {
@@ -116,7 +116,7 @@ func (l *LinkedList[T]) Print() {
 }
 
 func main() {
-	list := &LinkedList[string]{}
+	var list LinkedList[string]
 	fmt.Println("Введите строку:")
 	scanner := bufio.NewReader(os.Stdin)
 	text, _ := scanner.ReadString('\n')
@@ -125,17 +125,17 @@ func main() {
 		list.Append(words[i])
 	}
 
-	data, err := json.MarshalIndent(list, "", " ")
+	data, err := json.MarshalIndent(&list, "", " ")
 	if err != nil {
 		fmt.Println(err)
 	}
+	fmt.Println(string(data))
 	var list2 LinkedList[string]
 	err2 := json.Unmarshal(data, &list2)
 	if err2 != nil {
 		fmt.Println(err2)
 	}
 	list2.Print()
-	fmt.Println(string(data))
 	// list := LinkedList{...}
 	// b, _ := json.Marshal(list)
 	// var newList LinkedList
