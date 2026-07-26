@@ -66,7 +66,6 @@ func (l *LinkedList[T]) Append(i T) {
 		cur = cur.next
 	}
 	cur.next = z
-
 }
 
 func (l *LinkedList[T]) UnmarshalJSON(data []byte) error {
@@ -88,13 +87,12 @@ func (l *LinkedList[T]) MarshalJSON() ([]byte, error) {
 	if l == nil {
 		return json.Marshal(nil)
 	}
-	length := l.Len()
 	return json.Marshal(struct {
 		Head   *Node[T] `json:"head,omitempty"`
 		Length int      `json:"length"`
 	}{
 		Head:   l.head,
-		Length: length,
+		Length: l.Len(),
 	})
 }
 func (l *LinkedList[T]) Len() int {

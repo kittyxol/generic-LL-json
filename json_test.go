@@ -33,7 +33,7 @@ func TestLinkedList_string_MarshalJSON_NonEmpty(t *testing.T) {
 			},
 			"length": 3
 		}
-			`)
+	`)
 }
 
 func TestLinkedList_string_MarshalJSON_Empty(t *testing.T) {
@@ -61,7 +61,7 @@ func TestLinkedList_int_MarshalJSON_NonEmpty(t *testing.T) {
 			},
 			"length": 2
 		}
-			`)
+	`)
 }
 func TestLinkedList_structUser_MarshalJSON_NonEmpty(t *testing.T) {
 	t.Parallel()
@@ -86,7 +86,7 @@ func TestLinkedList_structUser_MarshalJSON_NonEmpty(t *testing.T) {
 			},
 			"length": 2
 		}
-			`)
+	`)
 }
 
 func TestLinkedList_string_UnmarshalJSON_NonEmpty(t *testing.T) {
